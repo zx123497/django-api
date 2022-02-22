@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-za0^6hg8)ljh_&*v!&l!5ytew*7=(4cl1_-36q-+1!*d+6kkoo
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['django-leo-web.herokuapp.com/']
 
 
 # Application definition
@@ -43,12 +43,14 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware'
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+
 ]
 
 ROOT_URLCONF = 'mytestsite.urls'
@@ -125,6 +127,3 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 import django_heroku
 django_heroku.settings(locals())
-ALLOWED_HOSTS = [
-    'django-leo-web.herokuapp.com/'
-]
