@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from .models import Article
+from .models import PTTArticle
 
 # class ArticleSerializer(serializers.Serializer):
 #     title = serializers.CharField(max_length=100)
@@ -23,4 +24,10 @@ class ArticleSerializer(serializers.ModelSerializer):
     class Meta:
         model = Article
         fields = ['id', 'title', 'author']
+
+
+class PTTArticleSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = PTTArticle
+        fields = ['id', 'author', 'board', 'title', 'date', 'content']
 
