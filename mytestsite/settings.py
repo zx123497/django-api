@@ -136,7 +136,7 @@ STATICFILES_STORAGE = "whitenoise.storage.CompressedStaticFilesStorage"
 REST_FRAMEWORK = {
     'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema'
 }
-
+CORS_ORIGIN_ALLOW_ALL = True
 SWAGGER_SETTINGS = {
     'SECURITY_DEFINITIONS': {
         'basic': {
