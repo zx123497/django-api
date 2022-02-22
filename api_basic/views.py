@@ -4,10 +4,10 @@ from django.http import HttpResponse, JsonResponse
 from rest_framework.parsers import JSONParser
 from .models import Article
 from .serializers import ArticleSerializer
-from django.views.decorators.csrf import csrf_exempt
+
 # Create your views here.
 
-@csrf_exempt
+
 def article_list(request):
 
     if request.method == 'GET':
@@ -24,7 +24,6 @@ def article_list(request):
             return JsonResponse( serializer.data, status = 201)
         return JsonResponse( serializer.errors, status = 400)
 
-@csrf_exempt
 def article_detail(request, pk):
     try:
         article = Article.objects.get(pk=pk)
