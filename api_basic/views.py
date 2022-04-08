@@ -22,8 +22,8 @@ class PttView(GenericAPIView):
     serializer_class = PTTArticleSerializer
 
     @swagger_auto_schema(
-        operation_summary='取得ptt紀錄',
-        operation_description='拿到所有儲存的ptt紀錄',
+        operation_summary='取得有趣pttの紀錄列表',
+        operation_description='拿到所有儲存的有趣pttの紀錄',
     )
     def get(self, request, *args, **krgs):
         users = self.get_queryset()
@@ -32,8 +32,8 @@ class PttView(GenericAPIView):
         return JsonResponse(data, safe=False)
 
     @swagger_auto_schema(
-        operation_summary='儲存ptt內容',
-        operation_description='儲存傳入url的ptt內容',
+        operation_summary='儲存有趣ptt',
+        operation_description='儲存傳入url　有趣pttの紀錄內容 \n可以把看到有趣的PTT文章上傳上去和大家分享 成為生活小樂趣',
         request_body=openapi.Schema(
             type=openapi.TYPE_OBJECT,
             properties={
@@ -103,19 +103,19 @@ class PttDetail(GenericAPIView):
 
 class CurrencyList(GenericAPIView):
     @swagger_auto_schema(
-        operation_summary='加密貨幣列表',
-        operation_description='得到加密貨幣列表',
+        operation_summary='加密貨幣列表Cryptocurrency list on CoinMarketCap',
+        operation_description='得到加密貨幣列表(ID 前200)',
     )
     def get(self, request, *args, **krgs):
-        url = 'https://sandbox-api.coinmarketcap.com/v1/cryptocurrency/listings/latest'
+        url = 'https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/latest'
         parameters = {
             'start': '1',
-            'limit': '5000',
+            'limit': '200',
             'convert': 'USD'
         }
         headers = {
             'Accepts': 'application/json',
-            'X-CMC_PRO_API_KEY': 'b54bcf4d-1bca-4e8e-9a24-22ff2c3d462c',
+            'X-CMC_PRO_API_KEY': '7022650a-4481-4485-8f40-13deb4d37061',
         }
 
         session = Session()
@@ -124,9 +124,61 @@ class CurrencyList(GenericAPIView):
         try:
             response = session.get(url, params=parameters)
             data = json.loads(response.text)
-            JsonResponse(data, status=200)
+            return JsonResponse(data, status=200)
         except (ConnectionError, Timeout, TooManyRedirects) as e:
-            JsonResponse(e, status=400)
+            return JsonResponse(e, status=400)
+
+
+class CurrencyDetail(GenericAPIView):
+    @swagger_auto_schema(
+        operation_summary='一項加密貨幣市價 a type of crypto market quote',
+        operation_description='一項加密貨幣市價 a type of crypto market quote \nsymbol 是指 BTC ETH SOL AVAX 等等',
+    )
+    def get(self, request, symbol, *args, **krgs):
+        url = 'https://pro-api.coinmarketcap.com/v2/cryptocurrency/quotes/latest'
+        parameters = {
+            'symbol': symbol,
+        }
+        headers = {
+            'Accepts': 'application/json',
+            'X-CMC_PRO_API_KEY': '7022650a-4481-4485-8f40-13deb4d37061',
+        }
+
+        session = Session()
+        session.headers.update(headers)
+
+        try:
+            response = session.get(url, params=parameters)
+            data = json.loads(response.text)
+            return JsonResponse(data, status=200)
+        except (ConnectionError, Timeout, TooManyRedirects) as e:
+            return JsonResponse(e, status=400)
+
+
+class CurrencyStory(GenericAPIView):
+    @swagger_auto_schema(
+        operation_summary='一項加密貨幣的簡介 LOGO 相關社群媒體 官網 技術文件白皮書等',
+        operation_description='Returns all static metadata available for one or more cryptocurrencies. This information includes details like logo, description, official website URL, social links, and links to a cryptocurrencys technical documentation.',
+    )
+    def get(self, request, symbol, *args, **krgs):
+        url = 'https://pro-api.coinmarketcap.com/v2/cryptocurrency/info'
+        parameters = {
+            'symbol': symbol,
+        }
+        headers = {
+            'Accepts': 'application/json',
+            'X-CMC_PRO_API_KEY': '7022650a-4481-4485-8f40-13deb4d37061',
+        }
+
+        session = Session()
+        session.headers.update(headers)
+
+        try:
+            response = session.get(url, params=parameters)
+            data = json.loads(response.text)
+            return JsonResponse(data, status=200)
+        except (ConnectionError, Timeout, TooManyRedirects) as e:
+            return JsonResponse(e, status=400)
 
 
 @csrf_exempt
