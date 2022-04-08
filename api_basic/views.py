@@ -12,6 +12,10 @@ from rest_framework.generics import GenericAPIView
 from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
 
+from requests import Request, Session
+from requests.exceptions import ConnectionError, Timeout, TooManyRedirects
+import json
+
 
 class PttView(GenericAPIView):
     queryset = PTTArticle.objects.all()
@@ -95,6 +99,34 @@ class PttDetail(GenericAPIView):
         ptt = self.get_object(pk)
         ptt.delete()
         return JsonResponse(status=204)
+
+
+class CurrencyList(GenericAPIView):
+    @swagger_auto_schema(
+        operation_summary='加密貨幣列表',
+        operation_description='得到加密貨幣列表',
+    )
+    def get(self, request, *args, **krgs):
+        url = 'https://sandbox-api.coinmarketcap.com/v1/cryptocurrency/listings/latest'
+        parameters = {
+            'start': '1',
+            'limit': '5000',
+            'convert': 'USD'
+        }
+        headers = {
+            'Accepts': 'application/json',
+            'X-CMC_PRO_API_KEY': 'b54bcf4d-1bca-4e8e-9a24-22ff2c3d462c',
+        }
+
+        session = Session()
+        session.headers.update(headers)
+
+        try:
+            response = session.get(url, params=parameters)
+            data = json.loads(response.text)
+            JsonResponse(data, status=200)
+        except (ConnectionError, Timeout, TooManyRedirects) as e:
+            JsonResponse(e, status=400)
 
 
 @csrf_exempt

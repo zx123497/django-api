@@ -1,6 +1,7 @@
 
 from django.urls import path, re_path
 from .views import article_list, article_detail, PttView, PttDetail
+from .views import CurrencyList
 from rest_framework import permissions
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
@@ -27,5 +28,6 @@ urlpatterns = [
     path('article/', article_list),
     path('article/<int:pk>/', article_detail),
     path('ptt/', PttView.as_view()),
-    path('ptt/<int:pk>/', PttDetail.as_view())
+    path('ptt/<int:pk>/', PttDetail.as_view()),
+    path('currency/', CurrencyList.as_view())
 ]
