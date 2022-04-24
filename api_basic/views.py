@@ -1,4 +1,5 @@
 # from turtle import st
+from django.conf import settings
 from django.shortcuts import render
 from django.http import HttpResponse, JsonResponse
 from rest_framework.parsers import JSONParser
@@ -115,7 +116,7 @@ class CurrencyList(GenericAPIView):
         }
         headers = {
             'Accepts': 'application/json',
-            'X-CMC_PRO_API_KEY': '7022650a-4481-4485-8f40-13deb4d37061',
+            'X-CMC_PRO_API_KEY': settings.CURRENCY_API_KEY,
         }
 
         session = Session()
@@ -141,7 +142,7 @@ class CurrencyDetail(GenericAPIView):
         }
         headers = {
             'Accepts': 'application/json',
-            'X-CMC_PRO_API_KEY': '7022650a-4481-4485-8f40-13deb4d37061',
+            'X-CMC_PRO_API_KEY': settings.CURRENCY_API_KEY,
         }
 
         session = Session()
@@ -167,7 +168,7 @@ class CurrencyStory(GenericAPIView):
         }
         headers = {
             'Accepts': 'application/json',
-            'X-CMC_PRO_API_KEY': '7022650a-4481-4485-8f40-13deb4d37061',
+            'X-CMC_PRO_API_KEY': settings.CURRENCY_API_KEY,
         }
 
         session = Session()
