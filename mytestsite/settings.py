@@ -13,7 +13,6 @@ import os
 import django_heroku
 from pathlib import Path
 import environ
-from boto.s3.connection import S3Connection
 # Initialise environment variables
 env = environ.Env()
 environ.Env.read_env()
