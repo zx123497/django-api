@@ -1,6 +1,6 @@
 from django.conf import settings
 from django.shortcuts import render
-from django.http import HttpResponse, JsonResponse
+from django.http import HttpResponse, HttpResponseBadRequest, HttpResponseForbidden, JsonResponse
 from rest_framework.parsers import JSONParser
 from django.views.decorators.csrf import csrf_exempt
 from django.db import transaction
@@ -8,10 +8,15 @@ from django.db import transaction
 from rest_framework.generics import GenericAPIView
 from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
-
+from linebot import LineBotApi, WebhookParser
+from linebot.exceptions import InvalidSignatureError, LineBotApiError
+from linebot.models import MessageEvent, TextSendMessage
 from requests import Request, Session
 from requests.exceptions import ConnectionError, Timeout, TooManyRedirects
 import json
+
+line_bot_api = LineBotApi(settings.LINE_CHANNEL_ACCESS_TOKEN)
+parser = WebhookParser(settings.LINE_CHANNEL_SECRET)
 
 
 class LineBot(GenericAPIView):
@@ -19,22 +24,45 @@ class LineBot(GenericAPIView):
         operation_summary='LINEBOT 測試',
         operation_description='line bot testing',
     )
-    def post(self, request, symbol, *args, **krgs):
-        url = 'https://pro-api.coinmarketcap.com/v2/cryptocurrency/info'
-        parameters = {
-            'symbol': symbol,
-        }
-        headers = {
-            'Accepts': 'application/json',
-            'X-CMC_PRO_API_KEY': settings.CURRENCY_API_KEY,
-        }
+    def post(self, request, *args, **krgs):
+        signature = request.META['HTTP_X_LINE_SIGNATURE']
+        body = request.body.decode('utf-8')
+        try:
+            events = parser.parse(body, signature)
+        except InvalidSignatureError:
+            return HttpResponseForbidden()
+        except LineBotApiError:
+            return HttpResponseBadRequest()
 
-        session = Session()
-        session.headers.update(headers)
+        for event in events:
+            if isinstance(event, MessageEvent):
+                line_bot_api.reply_message(
+                    event.reply_token,
+                    TextSendMessage(text=event.message.text)
+                )
+        return HttpResponse()
+
+
+@csrf_exempt
+def callback(request):
+
+    if request.method == 'POST':
+        signature = request.META['HTTP_X_LINE_SIGNATURE']
+        body = request.body.decode('utf-8')
 
         try:
-            response = session.get(url, params=parameters)
-            data = json.loads(response.text)
-            return JsonResponse(data, status=200)
-        except (ConnectionError, Timeout, TooManyRedirects) as e:
-            return JsonResponse(e, status=400)
+            events = parser.parse(body, signature)
+        except InvalidSignatureError:
+            return HttpResponseForbidden()
+        except LineBotApiError:
+            return HttpResponseBadRequest()
+
+        for event in events:
+            if isinstance(event, MessageEvent):
+                line_bot_api.reply_message(
+                    event.reply_token,
+                    TextSendMessage(text=event.message.text)
+                )
+        return HttpResponse()
+    else:
+        return HttpResponseBadRequest()
