@@ -21,8 +21,8 @@ parser = WebhookParser(settings.LINE_CHANNEL_SECRET)
 
 class LineBot(GenericAPIView):
     @swagger_auto_schema(
-        operation_summary='LINEBOT 測試',
-        operation_description='line bot testing',
+        operation_summary='LINEBOT ECHO',
+        operation_description='line bot testing echo',
     )
     def post(self, request, *args, **krgs):
         signature = request.META['HTTP_X_LINE_SIGNATURE']
@@ -41,28 +41,3 @@ class LineBot(GenericAPIView):
                     TextSendMessage(text=event.message.text)
                 )
         return HttpResponse()
-
-
-@csrf_exempt
-def callback(request):
-
-    if request.method == 'POST':
-        signature = request.META['HTTP_X_LINE_SIGNATURE']
-        body = request.body.decode('utf-8')
-
-        try:
-            events = parser.parse(body, signature)
-        except InvalidSignatureError:
-            return HttpResponseForbidden()
-        except LineBotApiError:
-            return HttpResponseBadRequest()
-
-        for event in events:
-            if isinstance(event, MessageEvent):
-                line_bot_api.reply_message(
-                    event.reply_token,
-                    TextSendMessage(text=event.message.text)
-                )
-        return HttpResponse()
-    else:
-        return HttpResponseBadRequest()
