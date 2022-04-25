@@ -14,9 +14,18 @@ import django_heroku
 from pathlib import Path
 import environ
 # Initialise environment variables
-env = environ.Env()
-environ.Env.read_env()
+env = environ.Env(
+    # set casting, default value
+    DEBUG=(bool, False)
+)
+READ_DOT_ENV_FILE = env.bool('READ_DOT_ENV_FILE', default=False)
+if READ_DOT_ENV_FILE:
+    environ.Env.read_env()
 
+DEBUG = env('DEBUG')
+# ROOT_DIR = (
+#     environ.Path(__file__) - 2
+# )
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -25,15 +34,24 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ.get("SECRET_KEY")
-
+SECRET_KEY = env("SECRET_KEY_SETTING")
+LINE_CHANNEL_SECRET = env("CHANNEL_SECRET")
+LINE_CHANNEL_ACCESS_TOKEN = env("CHANNEL_ACCESS_TOKEN")
+CURRENCY_API_KEY = env("CURRENCY_API_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+
 
 ALLOWED_HOSTS = ['django-leo-web.herokuapp.com/']
+READ_DOT_ENV_FILE = env.bool("READ_ENV", default=True)
 
-CURRENCY_API_KEY = os.environ.get("CURRENCY_API_KEY")
+# if READ_DOT_ENV_FILE:
+#     env.read_env(str(ROOT_DIR.path(".env")))
+#     print("================local ENV=============")
 
+#     SECRET_KEY = env("SECRET_KEY_SETTING")
+#     LINE_CHANNEL_SECRET = env("CHANNEL_SECRET")
+#     LINE_CHANNEL_ACCESS_TOKEN = env("CHANNEL_ACCESS_TOKEN")
+#     CURRENCY_API_KEY = env("CURRENCY_API_KEY")
 # Application definition
 
 INSTALLED_APPS = [
