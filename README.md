@@ -4,7 +4,7 @@
 1. 切換到新的branch (git checkout -b "newbranchname")
 2. 將修改的code commit 之後 將此 branch push (git push origin newbranchname)
 3. 到github上面發起一個pull request
-4. github會進行自動檢查並且部署到heroku
+4. github會進行語法與安全性檢查並且部署到heroku
 5. 如果沒有問題 就可以把該branch merge 到 main branch 上
 
 ## 環境變數
