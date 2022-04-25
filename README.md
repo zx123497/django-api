@@ -12,6 +12,9 @@
 + 環境變數
   + 請在最外層的資料夾中新建.env 然後依照template 中的格式進行填寫
 + 下載套件
-  ```pip install -r requirements.txt```
+  + ```pip install -r requirements.txt```
++ 執行migrate
+  + ```python manage.py makemigrations
+  + ```pythom manage.py migrate
 + 開啟dev server
-```python manage.py runserver```
+  + ```python manage.py runserver```
