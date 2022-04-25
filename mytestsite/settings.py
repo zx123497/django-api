@@ -34,10 +34,13 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = env("SECRET_KEY_SETTING")
-LINE_CHANNEL_SECRET = env("CHANNEL_SECRET")
-LINE_CHANNEL_ACCESS_TOKEN = env("CHANNEL_ACCESS_TOKEN")
-CURRENCY_API_KEY = env("CURRENCY_API_KEY")
+SECRET_KEY = os.environ.get('SECRET_KEY_SETTING', env("SECRET_KEY_SETTING"))
+LINE_CHANNEL_SECRET = os.environ.get(
+    'CHANNEL_SECRET', env("CHANNEL_SECRET"))
+LINE_CHANNEL_ACCESS_TOKEN = os.environ.get(
+    'CHANNEL_ACCESS_TOKEN', env("CHANNEL_ACCESS_TOKEN"))
+CURRENCY_API_KEY = os.environ.get(
+    'CURRENCY_API_KEY', env("CURRENCY_API_KEY"))
 # SECURITY WARNING: don't run with debug turned on in production!
 
 
