@@ -1,5 +1,7 @@
 
 from django.urls import path, re_path
+
+from .View.linebotView import LineBot
 from .views import article_list, article_detail, PttView, PttDetail
 from .views import CurrencyList, CurrencyDetail, CurrencyStory
 from rest_framework import permissions
@@ -32,4 +34,5 @@ urlpatterns = [
     path('crypto/', CurrencyList.as_view()),
     path('crypto/<str:symbol>/', CurrencyDetail.as_view()),
     path('crypto/story/<str:symbol>/', CurrencyStory.as_view()),
+    path('linebot/englishtest/', LineBot.as_view()),
 ]
