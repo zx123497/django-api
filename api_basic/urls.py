@@ -1,7 +1,7 @@
 
 from django.urls import path, re_path
 
-from mytestsite.api_basic.View.linebotView import LineBot
+from .View.linebotView import LineBot
 from .views import article_list, article_detail, PttView, PttDetail
 from .views import CurrencyList, CurrencyDetail, CurrencyStory
 from rest_framework import permissions
