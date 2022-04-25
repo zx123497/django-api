@@ -25,6 +25,8 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
       - name: Run migrations
+        env: 
+         SECRET_KEY: )v!!hc6ecsa8#mv*w_!2%y6%j%tceuvou1zs=1t$-gfa*eo9@_
         run: |
           python manage.py makemigrations --noinput
           python manage.py migrate --noinput
