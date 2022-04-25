@@ -7,7 +7,11 @@
 4. github會進行語法與安全性檢查並且部署到heroku
 5. 如果沒有問題 就可以把該branch merge 到 main branch 上
 
-## 環境變數
-+ 請在最外層的資料夾中新建.env 然後依照template 中的格式進行填寫
-+ test haha
-  
+## 環境設定 
++ python pip
++ 環境變數
+  + 請在最外層的資料夾中新建.env 然後依照template 中的格式進行填寫
++ 下載套件
+  ```pip install -r requirements.txt```
++ 開啟dev server
+```python manage.py runserver```
