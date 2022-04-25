@@ -27,6 +27,9 @@ jobs:
       - name: Run migrations
         env: 
          SECRET_KEY: )v!!hc6ecsa8#mv*w_!2%y6%j%tceuvou1zs=1t$-gfa*eo9@_
+         CHANNEL_SECRET: 123
+         CHANNEL_ACCESS_TOKEN: 123
+         CURRENCY_API_KEY: 123
         run: |
           python manage.py makemigrations --noinput
           python manage.py migrate --noinput
