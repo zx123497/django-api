@@ -19,7 +19,6 @@ env = environ.Env(
     DEBUG=(bool, False)
 )
 
-environ.Env.read_env()
 
 DEBUG = env('DEBUG')
 # ROOT_DIR = (
@@ -27,13 +26,13 @@ DEBUG = env('DEBUG')
 # )
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-
+environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ.get('SECRET_KEY_SETTING', env("SECRET_KEY_SETTING"))
+SECRET_KEY = os.environ.get('SECRET_KEY', env("SECRET_KEY"))
 LINE_CHANNEL_SECRET = os.environ.get(
     'CHANNEL_SECRET', env("CHANNEL_SECRET"))
 LINE_CHANNEL_ACCESS_TOKEN = os.environ.get(
